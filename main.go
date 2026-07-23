@@ -24,6 +24,11 @@ func main() {
 			num, err := strconv.Atoi(val)
 			return err == nil && num >= 0
 		},
+		"SignedNumeric": func(val string) bool {
+			// SignedNumeric: Allows positive/negative integers (e.g., "-1", "123")
+			_, err := strconv.Atoi(val)
+			return err == nil
+		},
 		"Floating": func(val string) bool {
 			// Floating: Allows only positive floating-point values (e.g., "3.14", "0.005")
 			_, err := strconv.ParseFloat(val, 64)
@@ -57,7 +62,7 @@ func main() {
 			if val == "" {
 				return true // Empty is allowed (means no crossplay)
 			}
-			
+
 			// Split by comma and validate each platform
 			platforms := strings.Split(val, ",")
 			validPlatforms := map[string]bool{
@@ -66,7 +71,7 @@ func main() {
 				"PS5":   true,
 				"Mac":   true,
 			}
-			
+
 			for _, platform := range platforms {
 				platform = strings.TrimSpace(platform)
 				if platform != "" && !validPlatforms[platform] {
@@ -80,95 +85,124 @@ func main() {
 
 	// Read environment variables
 	envVars := map[string]string{
-		"Difficulty":                           "DIFFICULTY",
-		"DayTimeSpeedRate":                     "DAY_TIME_SPEED_RATE",
-		"NightTimeSpeedRate":                   "NIGHT_TIME_SPEED_RATE",
-		"ExpRate":                              "EXP_RATE",
-		"PalCaptureRate":                       "PAL_CAPTURE_RATE",
-		"PalSpawnNumRate":                      "PAL_SPAWN_NUM_RATE",
-		"PalDamageRateAttack":                  "PAL_DAMAGE_RATE_ATTACK",
-		"PalDamageRateDefense":                 "PAL_DAMAGE_RATE_DEFENSE",
-		"PlayerDamageRateAttack":               "PLAYER_DAMAGE_RATE_ATTACK",
-		"PlayerDamageRateDefense":              "PLAYER_DAMAGE_RATE_DEFENSE",
-		"PlayerStomachDecreaceRate":            "PLAYER_STOMACH_DECREACE_RATE",
-		"PlayerStaminaDecreaceRate":            "PLAYER_STAMINA_DECREACE_RATE",
-		"PlayerAutoHPRegeneRate":               "PLAYER_AUTO_HP_REGENE_RATE",
-		"PlayerAutoHpRegeneRateInSleep":        "PLAYER_AUTO_HP_REGENE_RATE_IN_SLEEP",
-		"PalStomachDecreaceRate":               "PAL_STOMACH_DECREACE_RATE",
-		"PalStaminaDecreaceRate":               "PAL_STAMINA_DECREACE_RATE",
-		"PalAutoHPRegeneRate":                  "PAL_AUTO_HP_REGENE_RATE",
-		"PalAutoHpRegeneRateInSleep":           "PAL_AUTO_HP_REGENE_RATE_IN_SLEEP",
-		"BuildObjectDamageRate":                "BUILD_OBJECT_DAMAGE_RATE",
-		"BuildObjectDeteriorationDamageRate":   "BUILD_OBJECT_DETERIORATION_DAMAGE_RATE",
-		"CollectionDropRate":                   "COLLECTION_DROP_RATE",
-		"CollectionObjectHpRate":               "COLLECTION_OBJECT_HP_RATE",
-		"CollectionObjectRespawnSpeedRate":     "COLLECTION_OBJECT_RESPAWN_SPEED_RATE",
-		"EnemyDropItemRate":                    "ENEMY_DROP_ITEM_RATE",
-		"DeathPenalty":                         "DEATH_PENALTY",
-		"bEnablePlayerToPlayerDamage":          "ENABLE_PLAYER_TO_PLAYER_DAMAGE",
-		"bEnableFriendlyFire":                  "ENABLE_FRIENDLY_FIRE",
-		"bEnableInvaderEnemy":                  "ENABLE_ENEMY",
-		"bActiveUNKO":                          "ACTIVE_UNKO",
-		"bEnableAimAssistPad":                  "ENABLE_AIM_ASSIST_PAD",
-		"bEnableAimAssistKeyboard":             "ENABLE_AIM_ASSIST_KEYBOARD",
-		"DropItemMaxNum":                       "DROP_ITEM_MAX_NUM",
-		"DropItemMaxNum_UNKO":                  "DROP_ITEM_MAX_NUM_UNKO",
-		"BaseCampMaxNum":                       "BASE_CAMP_MAX_NUM",
-		"BaseCampWorkerMaxNum":                 "BASE_CAMP_WORKER_MAX_NUM",
-		"DropItemAliveMaxHours":                "DROP_ITEM_ALIVE_MAX_HOURS",
-		"bAutoResetGuildNoOnlinePlayers":       "AUTO_RESET_GUILD_NO_ONLINE_PLAYERS",
-		"AutoResetGuildTimeNoOnlinePlayers":    "AUTO_RESET_GUILD_TIME_NO_ONLINE_PLAYERS",
-		"GuildPlayerMaxNum":                    "GUILD_PLAYER_MAX_NUM",
-		"BaseCampMaxNumInGuild":                "BASE_CAMP_MAX_NUM_IN_GUILD",
-		"PalEggDefaultHatchingTime":            "PAL_EGG_DEFAULT_HATCHING_TIME",
-		"WorkSpeedRate":                        "WORK_SPEED_RATE",
-		"bIsMultiplay":                         "IS_MULTIPLAY",
-		"bIsPvP":                               "IS_PVP",
-		"bCanPickupOtherGuildDeathPenaltyDrop": "CAN_PICKUP_OTHER_GUILD_DEATH_PENALTY_DROP",
-		"bEnableNonLoginPenalty":               "ENABLE_NON_LOGIN_PENALTY",
-		"bEnableFastTravel":                    "ENABLE_FAST_TRAVEL",
-		"bIsStartLocationSelectByMap":          "IS_START_LOCATION_SELECT_BY_MAP",
-		"bExistPlayerAfterLogout":              "EXIST_PLAYER_AFTER_LOGOUT",
-		"bEnableDefenseOtherGuildPlayer":       "ENABLE_DEFENSE_OTHER_GUILD_PLAYER",
-		"CoopPlayerMaxNum":                     "COOP_PLAYER_MAX_NUM",
-		"ServerPlayerMaxNum":                   "MAX_PLAYERS",
-		"ServerName":                           "SERVER_NAME",
-		"ServerDescription":                    "SERVER_DESCRIPTION",
-		"ServerPassword":                       "SERVER_PASSWORD",
-		"AdminPassword":                        "ADMIN_PASSWORD",
-		"PublicPort":                           "SERVER_PORT",
-		"RCONPort":                             "RCON_PORT",
-		"RCONEnabled":                          "RCON_ENABLE",
-		"bUseAuth":                             "USE_AUTH",
-		"BanListURL":                           "BAN_LIST_URL",
-		"Region":                               "SERVER_REGION",
-		"bShowPlayerList":                      "SHOW_PLAYER_LIST",
-		"RESTAPIEnabled":                       "REST_API_ENABLED",
-		"RESTAPIPort":                          "REST_API_PORT",
-		"bIsUseBackupSaveData":                 "USE_BACKUP_SAVE_DATA",
-		"LogFormatType":                        "LOG_FORMAT_TYPE",
-		"SupplyDropSpan":                       "SUPPLY_DROP_SPAN",
-		"ChatPostLimitPerMinute":               "CHAT_POST_LIMIT",
-		"bInvisibleOtherGuildBaseCampAreaFX":   "INVISIBLE_OTHER_GUILD_BASE",	
-		"AutoSaveSpan":                         "AUTO_SAVE_SPAN",
-		"RandomizerType":                       "RANDOMIZER_TYPE",				
-		"RandomizerSeed":                       "RANDOMIZER_SEED",
-		"BuildObjectHpRate":                    "BUILD_OBJECT_HP_RATE",
-		"bHardcore":                            "HARDCORE",
-		"bPalLost":                             "PAL_LOST",
-		"bBuildAreaLimit":                      "BUILD_AREA_LIMIT",
-		"ItemWeightRate":                       "ITEM_WEIGHT_RATE",
-		"EnablePredatorBossPal":                "ENABLE_PREDATOR_BOSS_PAL",
-		"MaxBuildingLimitNum":                  "MAX_BUILDING_LIMIT_NUM",
-		"ServerReplicatePawnCullDistance":      "SERVER_REPLICATE_PAWN_CULL_DISTANCE",
-		"bIsRandomizerPalLevelRandom":          "IS_RANDOMIZER_PAL_LEVEL_RANDOM",
-		"bAllowGlobalPalboxExport":             "ALLOW_GLOBAL_PALBOX_EXPORT",
-		"bAllowGlobalPalboxImport":             "ALLOW_GLOBAL_PALBOX_IMPORT",
-		"bCharacterRecreateInHardcore":         "CHARACTER_RECREATE_IN_HARDCORE",
-		"EquipmentDurabilityDamageRate":        "EQUIPMENT_DURABILITY_DAMAGE_RATE",
-		"ItemContainerForceMarkDirtyInterval":  "ITEM_CONTAINER_FORCE_MARK_DIRTY_INTERVAL",
-		"ItemCorruptionMultiplier":             "ITEM_CORRUPTION_MULTIPLIER",
-		"CrossplayPlatforms":                   "CROSSPLAY_PLATFORMS",
+		"Difficulty":                                      "DIFFICULTY",
+		"DayTimeSpeedRate":                                "DAY_TIME_SPEED_RATE",
+		"NightTimeSpeedRate":                              "NIGHT_TIME_SPEED_RATE",
+		"ExpRate":                                         "EXP_RATE",
+		"PalCaptureRate":                                  "PAL_CAPTURE_RATE",
+		"PalSpawnNumRate":                                 "PAL_SPAWN_NUM_RATE",
+		"PalDamageRateAttack":                             "PAL_DAMAGE_RATE_ATTACK",
+		"PalDamageRateDefense":                            "PAL_DAMAGE_RATE_DEFENSE",
+		"PlayerDamageRateAttack":                          "PLAYER_DAMAGE_RATE_ATTACK",
+		"PlayerDamageRateDefense":                         "PLAYER_DAMAGE_RATE_DEFENSE",
+		"PlayerStomachDecreaceRate":                       "PLAYER_STOMACH_DECREACE_RATE",
+		"PlayerStaminaDecreaceRate":                       "PLAYER_STAMINA_DECREACE_RATE",
+		"PlayerAutoHPRegeneRate":                          "PLAYER_AUTO_HP_REGENE_RATE",
+		"PlayerAutoHpRegeneRateInSleep":                   "PLAYER_AUTO_HP_REGENE_RATE_IN_SLEEP",
+		"PalStomachDecreaceRate":                          "PAL_STOMACH_DECREACE_RATE",
+		"PalStaminaDecreaceRate":                          "PAL_STAMINA_DECREACE_RATE",
+		"PalAutoHPRegeneRate":                             "PAL_AUTO_HP_REGENE_RATE",
+		"PalAutoHpRegeneRateInSleep":                      "PAL_AUTO_HP_REGENE_RATE_IN_SLEEP",
+		"BuildObjectDamageRate":                           "BUILD_OBJECT_DAMAGE_RATE",
+		"BuildObjectDeteriorationDamageRate":              "BUILD_OBJECT_DETERIORATION_DAMAGE_RATE",
+		"CollectionDropRate":                              "COLLECTION_DROP_RATE",
+		"CollectionObjectHpRate":                          "COLLECTION_OBJECT_HP_RATE",
+		"CollectionObjectRespawnSpeedRate":                "COLLECTION_OBJECT_RESPAWN_SPEED_RATE",
+		"EnemyDropItemRate":                               "ENEMY_DROP_ITEM_RATE",
+		"DeathPenalty":                                    "DEATH_PENALTY",
+		"bEnablePlayerToPlayerDamage":                     "ENABLE_PLAYER_TO_PLAYER_DAMAGE",
+		"bEnableFriendlyFire":                             "ENABLE_FRIENDLY_FIRE",
+		"bEnableInvaderEnemy":                             "ENABLE_ENEMY",
+		"bActiveUNKO":                                     "ACTIVE_UNKO",
+		"bEnableAimAssistPad":                             "ENABLE_AIM_ASSIST_PAD",
+		"bEnableAimAssistKeyboard":                        "ENABLE_AIM_ASSIST_KEYBOARD",
+		"DropItemMaxNum":                                  "DROP_ITEM_MAX_NUM",
+		"DropItemMaxNum_UNKO":                             "DROP_ITEM_MAX_NUM_UNKO",
+		"BaseCampMaxNum":                                  "BASE_CAMP_MAX_NUM",
+		"BaseCampWorkerMaxNum":                            "BASE_CAMP_WORKER_MAX_NUM",
+		"DropItemAliveMaxHours":                           "DROP_ITEM_ALIVE_MAX_HOURS",
+		"bAutoResetGuildNoOnlinePlayers":                  "AUTO_RESET_GUILD_NO_ONLINE_PLAYERS",
+		"AutoResetGuildTimeNoOnlinePlayers":               "AUTO_RESET_GUILD_TIME_NO_ONLINE_PLAYERS",
+		"GuildPlayerMaxNum":                               "GUILD_PLAYER_MAX_NUM",
+		"BaseCampMaxNumInGuild":                           "BASE_CAMP_MAX_NUM_IN_GUILD",
+		"PalEggDefaultHatchingTime":                       "PAL_EGG_DEFAULT_HATCHING_TIME",
+		"WorkSpeedRate":                                   "WORK_SPEED_RATE",
+		"bIsMultiplay":                                    "IS_MULTIPLAY",
+		"bIsPvP":                                          "IS_PVP",
+		"bCanPickupOtherGuildDeathPenaltyDrop":            "CAN_PICKUP_OTHER_GUILD_DEATH_PENALTY_DROP",
+		"bEnableNonLoginPenalty":                          "ENABLE_NON_LOGIN_PENALTY",
+		"bEnableFastTravel":                               "ENABLE_FAST_TRAVEL",
+		"bIsStartLocationSelectByMap":                     "IS_START_LOCATION_SELECT_BY_MAP",
+		"bExistPlayerAfterLogout":                         "EXIST_PLAYER_AFTER_LOGOUT",
+		"bEnableDefenseOtherGuildPlayer":                  "ENABLE_DEFENSE_OTHER_GUILD_PLAYER",
+		"CoopPlayerMaxNum":                                "COOP_PLAYER_MAX_NUM",
+		"ServerPlayerMaxNum":                              "MAX_PLAYERS",
+		"ServerName":                                      "SERVER_NAME",
+		"ServerDescription":                               "SERVER_DESCRIPTION",
+		"ServerPassword":                                  "SERVER_PASSWORD",
+		"AdminPassword":                                   "ADMIN_PASSWORD",
+		"PublicPort":                                      "SERVER_PORT",
+		"RCONPort":                                        "RCON_PORT",
+		"RCONEnabled":                                     "RCON_ENABLE",
+		"bUseAuth":                                        "USE_AUTH",
+		"BanListURL":                                      "BAN_LIST_URL",
+		"Region":                                          "SERVER_REGION",
+		"bShowPlayerList":                                 "SHOW_PLAYER_LIST",
+		"RESTAPIEnabled":                                  "REST_API_ENABLED",
+		"RESTAPIPort":                                     "REST_API_PORT",
+		"bIsUseBackupSaveData":                            "USE_BACKUP_SAVE_DATA",
+		"LogFormatType":                                   "LOG_FORMAT_TYPE",
+		"SupplyDropSpan":                                  "SUPPLY_DROP_SPAN",
+		"ChatPostLimitPerMinute":                          "CHAT_POST_LIMIT",
+		"bInvisibleOtherGuildBaseCampAreaFX":              "INVISIBLE_OTHER_GUILD_BASE",
+		"AutoSaveSpan":                                    "AUTO_SAVE_SPAN",
+		"RandomizerType":                                  "RANDOMIZER_TYPE",
+		"RandomizerSeed":                                  "RANDOMIZER_SEED",
+		"BuildObjectHpRate":                               "BUILD_OBJECT_HP_RATE",
+		"bHardcore":                                       "HARDCORE",
+		"bPalLost":                                        "PAL_LOST",
+		"bBuildAreaLimit":                                 "BUILD_AREA_LIMIT",
+		"ItemWeightRate":                                  "ITEM_WEIGHT_RATE",
+		"EnablePredatorBossPal":                           "ENABLE_PREDATOR_BOSS_PAL",
+		"MaxBuildingLimitNum":                             "MAX_BUILDING_LIMIT_NUM",
+		"ServerReplicatePawnCullDistance":                 "SERVER_REPLICATE_PAWN_CULL_DISTANCE",
+		"bIsRandomizerPalLevelRandom":                     "IS_RANDOMIZER_PAL_LEVEL_RANDOM",
+		"bAllowGlobalPalboxExport":                        "ALLOW_GLOBAL_PALBOX_EXPORT",
+		"bAllowGlobalPalboxImport":                        "ALLOW_GLOBAL_PALBOX_IMPORT",
+		"bCharacterRecreateInHardcore":                    "CHARACTER_RECREATE_IN_HARDCORE",
+		"EquipmentDurabilityDamageRate":                   "EQUIPMENT_DURABILITY_DAMAGE_RATE",
+		"ItemContainerForceMarkDirtyInterval":             "ITEM_CONTAINER_FORCE_MARK_DIRTY_INTERVAL",
+		"ItemCorruptionMultiplier":                        "ITEM_CORRUPTION_MULTIPLIER",
+		"CrossplayPlatforms":                              "CROSSPLAY_PLATFORMS",
+		"PhysicsActiveDropItemMaxNum":                     "PHYSICS_ACTIVE_DROP_ITEM_MAX_NUM",
+		"bEnableFastTravelOnlyBaseCamp":                   "ENABLE_FAST_TRAVEL_ONLY_BASE_CAMP",
+		"bAllowClientMod":                                 "ALLOW_CLIENT_MOD",
+		"PlayerDataPalStorageUpdateCheckTickInterval":     "PLAYER_DATA_PAL_STORAGE_UPDATE_CHECK_TICK_INTERVAL",
+		"MonsterFarmActionSpeedRate":                      "MONSTER_FARM_ACTION_SPEED_RATE",
+		"DenyTechnologyList":                              "DENY_TECHNOLOGY_LIST",
+		"GuildRejoinCooldownMinutes":                      "GUILD_REJOIN_COOLDOWN_MINUTES",
+		"AutoTransferMasterCheckIntervalSeconds":          "AUTO_TRANSFER_MASTER_CHECK_INTERVAL_SECONDS",
+		"AutoTransferMasterThresholdDays":                 "AUTO_TRANSFER_MASTER_THRESHOLD_DAYS",
+		"MaxGuildsPerFrame":                               "MAX_GUILDS_PER_FRAME",
+		"BlockRespawnTime":                                "BLOCK_RESPAWN_TIME",
+		"RespawnPenaltyDurationThreshold":                 "RESPAWN_PENALTY_DURATION_THRESHOLD",
+		"RespawnPenaltyTimeScale":                         "RESPAWN_PENALTY_TIME_SCALE",
+		"bDisplayPvPItemNumOnWorldMap_BaseCamp":           "DISPLAY_PVP_ITEM_NUM_ON_WORLD_MAP_BASE_CAMP",
+		"bDisplayPvPItemNumOnWorldMap_Player":             "DISPLAY_PVP_ITEM_NUM_ON_WORLD_MAP_PLAYER",
+		"AdditionalDropItemWhenPlayerKillingInPvPMode":    "ADDITIONAL_DROP_ITEM_WHEN_PLAYER_KILLING_IN_PVP_MODE",
+		"AdditionalDropItemNumWhenPlayerKillingInPvPMode": "ADDITIONAL_DROP_ITEM_NUM_WHEN_PLAYER_KILLING_IN_PVP_MODE",
+		"bAdditionalDropItemWhenPlayerKillingInPvPMode":   "ENABLE_ADDITIONAL_DROP_ITEM_WHEN_PLAYER_KILLING_IN_PVP_MODE",
+		"bEnableVoiceChat":                                "ENABLE_VOICE_CHAT",
+		"VoiceChatMaxVolumeDistance":                      "VOICE_CHAT_MAX_VOLUME_DISTANCE",
+		"VoiceChatZeroVolumeDistance":                     "VOICE_CHAT_ZERO_VOLUME_DISTANCE",
+		"bAllowEnhanceStat_Health":                        "ALLOW_ENHANCE_STAT_HEALTH",
+		"bAllowEnhanceStat_Attack":                        "ALLOW_ENHANCE_STAT_ATTACK",
+		"bAllowEnhanceStat_Stamina":                       "ALLOW_ENHANCE_STAT_STAMINA",
+		"bAllowEnhanceStat_Weight":                        "ALLOW_ENHANCE_STAT_WEIGHT",
+		"bAllowEnhanceStat_WorkSpeed":                     "ALLOW_ENHANCE_STAT_WORK_SPEED",
+		"bEnableBuildingPlayerUIdDisplay":                 "ENABLE_BUILDING_PLAYER_UID_DISPLAY",
+		"BuildingNameDisplayCacheTTLSeconds":              "BUILDING_NAME_DISPLAY_CACHE_TTL_SECONDS",
+		"bIsShowJoinLeftMessage":                          "IS_SHOW_JOIN_LEFT_MESSAGE",
 		// Add other environment variables and corresponding INI keys here
 	}
 
@@ -177,96 +211,125 @@ func main() {
 
 	// Specify validation rules for each key
 	envVarsValidationRules := map[string]string{
-		"Difficulty":                           "String",    //Difficulty=None,
-		"DayTimeSpeedRate":                     "Floating",  //DayTimeSpeedRate=1.000000,
-		"NightTimeSpeedRate":                   "Floating",  //NightTimeSpeedRate=1.000000,
-		"ExpRate":                              "Floating",  //ExpRate=1.000000,
-		"PalCaptureRate":                       "Floating",  //PalCaptureRate=1.000000,
-		"PalSpawnNumRate":                      "Floating",  //PalSpawnNumRate=1.000000,
-		"PalDamageRateAttack":                  "Floating",  //PalDamageRateAttack=1.000000,
-		"PalDamageRateDefense":                 "Floating",  //PalDamageRateDefense=1.000000,
-		"PlayerDamageRateAttack":               "Floating",  //PlayerDamageRateAttack=1.000000,
-		"PlayerDamageRateDefense":              "Floating",  //PlayerDamageRateDefense=1.000000,
-		"PlayerStomachDecreaceRate":            "Floating",  //PlayerStomachDecreaceRate=1.000000,
-		"PlayerStaminaDecreaceRate":            "Floating",  //PlayerStaminaDecreaceRate=1.000000,
-		"PlayerAutoHPRegeneRate":               "Floating",  //PlayerAutoHPRegeneRate=1.000000,
-		"PlayerAutoHpRegeneRateInSleep":        "Floating",  //PlayerAutoHpRegeneRateInSleep=1.000000,
-		"PalStaminaDecreaceRate":               "Floating",  //PalStaminaDecreaceRate=1.000000,
-		"PalStomachDecreaceRate":               "Floating",  //PalStomachDecreaceRate=1.000000,
-		"PalAutoHPRegeneRate":                  "Floating",  //PalAutoHPRegeneRate=1.000000,
-		"PalAutoHpRegeneRateInSleep":           "Floating",  //PalAutoHpRegeneRateInSleep=1.000000,
-		"BuildObjectDamageRate":                "Floating",  //BuildObjectDamageRate=1.000000,
-		"BuildObjectDeteriorationDamageRate":   "Floating",  //BuildObjectDeteriorationDamageRate=1.000000,
-		"CollectionDropRate":                   "Floating",  //CollectionDropRate=1.000000,
-		"CollectionObjectHpRate":               "Floating",  //CollectionObjectHpRate=1.000000,
-		"CollectionObjectRespawnSpeedRate":     "Floating",  //CollectionObjectRespawnSpeedRate=1.000000,
-		"EnemyDropItemRate":                    "Floating",  //EnemyDropItemRate=1.000000,
-		"DeathPenalty":                         "String",    //DeathPenalty=All,
-		"bEnablePlayerToPlayerDamage":          "TrueFalse", //bEnablePlayerToPlayerDamage=False,
-		"bEnableFriendlyFire":                  "TrueFalse", //bEnableFriendlyFire=False,
-		"bEnableInvaderEnemy":                  "TrueFalse", //bEnableInvaderEnemy=True,
-		"bActiveUNKO":                          "TrueFalse", //bActiveUNKO=False,
-		"bEnableAimAssistPad":                  "TrueFalse", //bEnableAimAssistPad=True,
-		"bEnableAimAssistKeyboard":             "TrueFalse", //bEnableAimAssistKeyboard=False,
-		"DropItemMaxNum":                       "Numeric",   //DropItemMaxNum=3000,
-		"DropItemMaxNum_UNKO":                  "Numeric",   //DropItemMaxNum_UNKO=100,
-		"BaseCampMaxNum":                       "Numeric",   //BaseCampMaxNum=128,
-		"BaseCampWorkerMaxNum":                 "Numeric",   //BaseCampWorkerMaxNum=15,
-		"DropItemAliveMaxHours":                "Floating",  //DropItemAliveMaxHours=1.000000,
-		"AutoResetGuildTimeNoOnlinePlayers":    "Floating",  //AutoResetGuildTimeNoOnlinePlayers=72.000000,
-		"bAutoResetGuildNoOnlinePlayers":       "TrueFalse", //bAutoResetGuildNoOnlinePlayers=False,
-		"GuildPlayerMaxNum":                    "Numeric",   //GuildPlayerMaxNum=20,
-		"BaseCampMaxNumInGuild":                "Numeric",   //BaseCampMaxNumInGuild=3,
-		"PalEggDefaultHatchingTime":            "Floating",  //PalEggDefaultHatchingTime=72.000000,
-		"WorkSpeedRate":                        "Floating",  //WorkSpeedRate=1.000000,
-		"bIsMultiplay":                         "TrueFalse", //bIsMultiplay=False,
-		"bIsPvP":                               "TrueFalse", //bIsPvP=False,
-		"bCanPickupOtherGuildDeathPenaltyDrop": "TrueFalse", //bCanPickupOtherGuildDeathPenaltyDrop=False,
-		"bEnableNonLoginPenalty":               "TrueFalse", //bEnableNonLoginPenalty=True,
-		"bEnableFastTravel":                    "TrueFalse", //bEnableFastTravel=True,
-		"bIsStartLocationSelectByMap":          "TrueFalse", //bIsStartLocationSelectByMap=True,
-		"bExistPlayerAfterLogout":              "TrueFalse", //bExistPlayerAfterLogout=False,
-		"bEnableDefenseOtherGuildPlayer":       "TrueFalse", //bEnableDefenseOtherGuildPlayer=False,
-		"CoopPlayerMaxNum":                     "Numeric",   //CoopPlayerMaxNum=4,
-		"ServerPlayerMaxNum":                   "Numeric",   //ServerPlayerMaxNum=32,
-		"ServerName":                           "String",    //ServerName="Default Palworld Server",
-		"ServerDescription":                    "String",    //ServerDescription="",
-		"ServerPassword":                       "AlphaDash", //ServerPassword="",
-		"AdminPassword":                        "AlphaDash", //AdminPassword="",
-		"PublicIP":                             "String",    //PublicIP="",
-		"PublicPort":                           "Numeric",   //PublicPort=8211,
-		"RCONPort":                             "Numeric",   //RCONPort=25575,
-		"RCONEnabled":                          "TrueFalse", //RCONEnabled=False,
-		"bUseAuth":                             "TrueFalse", //bUseAuth=True,
-		"BanListURL":                           "String",    //BanListURL="https://api.palworldgame.com/api/banlist.txt"
-		"Region":                               "String",    //Region="",
-		"bShowPlayerList":                      "TrueFalse", //bShowPlayerList=False
-		"RESTAPIEnabled":                       "TrueFalse", //RESTAPIEnabled=False
-		"RESTAPIPort":                          "Numeric",   //RESTAPIPort=8212
-		"bIsUseBackupSaveData":                 "TrueFalse", //bIsUseBackupSaveData=True
-		"LogFormatType":                        "String",    //LogFormatType=Text
-		"SupplyDropSpan":                       "Numeric",   //SupplyDropSpan=180
-		"ChatPostLimitPerMinute":               "Numeric",   //ChatPostLimitPerMinute=10	
-		"bInvisibleOtherGuildBaseCampAreaFX":   "TrueFalse", //bInvisibleOtherGuildBaseCampAreaFX=False,		
-		"AutoSaveSpan":                         "Numeric",   //AutoSaveSpan=30,		
-		"RandomizerType":                       "String",    //RandomizerType=Node,		
-		"RandomizerSeed":                       "String",    //RandomizerSeed="",
-		"BuildObjectHpRate":                    "Floating",  //BuildObjectHpRate=1.000000,
-		"bHardcore":                         	"TrueFalse", //bHardcore=False,
-		"bPalLost":                         	"TrueFalse", //bPalLost=False,
-		"bBuildAreaLimit":                      "TrueFalse", //bBuildAreaLimit=False,
-		"ItemWeightRate":                       "Floating",  //ItemWeightRate=1.000000,
-		"EnablePredatorBossPal":                "TrueFalse", //EnablePredatorBossPal=True,
-		"MaxBuildingLimitNum":                  "Numeric",   //MaxBuildingLimitNum=0,
-		"ServerReplicatePawnCullDistance":      "Floating",  //ServerReplicatePawnCullDistance=15000.000000,
-		"bIsRandomizerPalLevelRandom":          "TrueFalse", //bIsRandomizerPalLevelRandom=False,
-		"bAllowGlobalPalboxExport":             "TrueFalse", //bAllowGlobalPalboxExport=True
-		"bAllowGlobalPalboxImport":             "TrueFalse", //bAllowGlobalPalboxImport=False
-		"bCharacterRecreateInHardcore":         "TrueFalse", //bCharacterRecreateInHardcore=False
-		"EquipmentDurabilityDamageRate":        "Floating",  //EquipmentDurabilityDamageRate=1.000000,
-		"ItemContainerForceMarkDirtyInterval":  "Floating",  //ItemContainerForceMarkDirtyInterval=1.000000
-		"ItemCorruptionMultiplier":             "Floating",  //ItemCorruptionMultiplier=1.000000
-		"CrossplayPlatforms":                   "CrossplayPlatforms", //CrossplayPlatforms=(Steam,Xbox,PS5,Mac)
+		"Difficulty":                                      "String",             //Difficulty=None,
+		"DayTimeSpeedRate":                                "Floating",           //DayTimeSpeedRate=1.000000,
+		"NightTimeSpeedRate":                              "Floating",           //NightTimeSpeedRate=1.000000,
+		"ExpRate":                                         "Floating",           //ExpRate=1.000000,
+		"PalCaptureRate":                                  "Floating",           //PalCaptureRate=1.000000,
+		"PalSpawnNumRate":                                 "Floating",           //PalSpawnNumRate=1.000000,
+		"PalDamageRateAttack":                             "Floating",           //PalDamageRateAttack=1.000000,
+		"PalDamageRateDefense":                            "Floating",           //PalDamageRateDefense=1.000000,
+		"PlayerDamageRateAttack":                          "Floating",           //PlayerDamageRateAttack=1.000000,
+		"PlayerDamageRateDefense":                         "Floating",           //PlayerDamageRateDefense=1.000000,
+		"PlayerStomachDecreaceRate":                       "Floating",           //PlayerStomachDecreaceRate=1.000000,
+		"PlayerStaminaDecreaceRate":                       "Floating",           //PlayerStaminaDecreaceRate=1.000000,
+		"PlayerAutoHPRegeneRate":                          "Floating",           //PlayerAutoHPRegeneRate=1.000000,
+		"PlayerAutoHpRegeneRateInSleep":                   "Floating",           //PlayerAutoHpRegeneRateInSleep=1.000000,
+		"PalStaminaDecreaceRate":                          "Floating",           //PalStaminaDecreaceRate=1.000000,
+		"PalStomachDecreaceRate":                          "Floating",           //PalStomachDecreaceRate=1.000000,
+		"PalAutoHPRegeneRate":                             "Floating",           //PalAutoHPRegeneRate=1.000000,
+		"PalAutoHpRegeneRateInSleep":                      "Floating",           //PalAutoHpRegeneRateInSleep=1.000000,
+		"BuildObjectDamageRate":                           "Floating",           //BuildObjectDamageRate=1.000000,
+		"BuildObjectDeteriorationDamageRate":              "Floating",           //BuildObjectDeteriorationDamageRate=1.000000,
+		"CollectionDropRate":                              "Floating",           //CollectionDropRate=1.000000,
+		"CollectionObjectHpRate":                          "Floating",           //CollectionObjectHpRate=1.000000,
+		"CollectionObjectRespawnSpeedRate":                "Floating",           //CollectionObjectRespawnSpeedRate=1.000000,
+		"EnemyDropItemRate":                               "Floating",           //EnemyDropItemRate=1.000000,
+		"DeathPenalty":                                    "String",             //DeathPenalty=All,
+		"bEnablePlayerToPlayerDamage":                     "TrueFalse",          //bEnablePlayerToPlayerDamage=False,
+		"bEnableFriendlyFire":                             "TrueFalse",          //bEnableFriendlyFire=False,
+		"bEnableInvaderEnemy":                             "TrueFalse",          //bEnableInvaderEnemy=True,
+		"bActiveUNKO":                                     "TrueFalse",          //bActiveUNKO=False,
+		"bEnableAimAssistPad":                             "TrueFalse",          //bEnableAimAssistPad=True,
+		"bEnableAimAssistKeyboard":                        "TrueFalse",          //bEnableAimAssistKeyboard=False,
+		"DropItemMaxNum":                                  "Numeric",            //DropItemMaxNum=3000,
+		"DropItemMaxNum_UNKO":                             "Numeric",            //DropItemMaxNum_UNKO=100,
+		"BaseCampMaxNum":                                  "Numeric",            //BaseCampMaxNum=128,
+		"BaseCampWorkerMaxNum":                            "Numeric",            //BaseCampWorkerMaxNum=15,
+		"DropItemAliveMaxHours":                           "Floating",           //DropItemAliveMaxHours=1.000000,
+		"AutoResetGuildTimeNoOnlinePlayers":               "Floating",           //AutoResetGuildTimeNoOnlinePlayers=72.000000,
+		"bAutoResetGuildNoOnlinePlayers":                  "TrueFalse",          //bAutoResetGuildNoOnlinePlayers=False,
+		"GuildPlayerMaxNum":                               "Numeric",            //GuildPlayerMaxNum=20,
+		"BaseCampMaxNumInGuild":                           "Numeric",            //BaseCampMaxNumInGuild=3,
+		"PalEggDefaultHatchingTime":                       "Floating",           //PalEggDefaultHatchingTime=72.000000,
+		"WorkSpeedRate":                                   "Floating",           //WorkSpeedRate=1.000000,
+		"bIsMultiplay":                                    "TrueFalse",          //bIsMultiplay=False,
+		"bIsPvP":                                          "TrueFalse",          //bIsPvP=False,
+		"bCanPickupOtherGuildDeathPenaltyDrop":            "TrueFalse",          //bCanPickupOtherGuildDeathPenaltyDrop=False,
+		"bEnableNonLoginPenalty":                          "TrueFalse",          //bEnableNonLoginPenalty=True,
+		"bEnableFastTravel":                               "TrueFalse",          //bEnableFastTravel=True,
+		"bIsStartLocationSelectByMap":                     "TrueFalse",          //bIsStartLocationSelectByMap=True,
+		"bExistPlayerAfterLogout":                         "TrueFalse",          //bExistPlayerAfterLogout=False,
+		"bEnableDefenseOtherGuildPlayer":                  "TrueFalse",          //bEnableDefenseOtherGuildPlayer=False,
+		"CoopPlayerMaxNum":                                "Numeric",            //CoopPlayerMaxNum=4,
+		"ServerPlayerMaxNum":                              "Numeric",            //ServerPlayerMaxNum=32,
+		"ServerName":                                      "String",             //ServerName="Default Palworld Server",
+		"ServerDescription":                               "String",             //ServerDescription="",
+		"ServerPassword":                                  "AlphaDash",          //ServerPassword="",
+		"AdminPassword":                                   "AlphaDash",          //AdminPassword="",
+		"PublicIP":                                        "String",             //PublicIP="",
+		"PublicPort":                                      "Numeric",            //PublicPort=8211,
+		"RCONPort":                                        "Numeric",            //RCONPort=25575,
+		"RCONEnabled":                                     "TrueFalse",          //RCONEnabled=False,
+		"bUseAuth":                                        "TrueFalse",          //bUseAuth=True,
+		"BanListURL":                                      "String",             //BanListURL="https://api.palworldgame.com/api/banlist.txt"
+		"Region":                                          "String",             //Region="",
+		"bShowPlayerList":                                 "TrueFalse",          //bShowPlayerList=False
+		"RESTAPIEnabled":                                  "TrueFalse",          //RESTAPIEnabled=False
+		"RESTAPIPort":                                     "Numeric",            //RESTAPIPort=8212
+		"bIsUseBackupSaveData":                            "TrueFalse",          //bIsUseBackupSaveData=True
+		"LogFormatType":                                   "String",             //LogFormatType=Text
+		"SupplyDropSpan":                                  "Numeric",            //SupplyDropSpan=180
+		"ChatPostLimitPerMinute":                          "Numeric",            //ChatPostLimitPerMinute=10
+		"bInvisibleOtherGuildBaseCampAreaFX":              "TrueFalse",          //bInvisibleOtherGuildBaseCampAreaFX=False,
+		"AutoSaveSpan":                                    "Numeric",            //AutoSaveSpan=30,
+		"RandomizerType":                                  "String",             //RandomizerType=Node,
+		"RandomizerSeed":                                  "String",             //RandomizerSeed="",
+		"BuildObjectHpRate":                               "Floating",           //BuildObjectHpRate=1.000000,
+		"bHardcore":                                       "TrueFalse",          //bHardcore=False,
+		"bPalLost":                                        "TrueFalse",          //bPalLost=False,
+		"bBuildAreaLimit":                                 "TrueFalse",          //bBuildAreaLimit=False,
+		"ItemWeightRate":                                  "Floating",           //ItemWeightRate=1.000000,
+		"EnablePredatorBossPal":                           "TrueFalse",          //EnablePredatorBossPal=True,
+		"MaxBuildingLimitNum":                             "Numeric",            //MaxBuildingLimitNum=0,
+		"ServerReplicatePawnCullDistance":                 "Floating",           //ServerReplicatePawnCullDistance=15000.000000,
+		"bIsRandomizerPalLevelRandom":                     "TrueFalse",          //bIsRandomizerPalLevelRandom=False,
+		"bAllowGlobalPalboxExport":                        "TrueFalse",          //bAllowGlobalPalboxExport=True
+		"bAllowGlobalPalboxImport":                        "TrueFalse",          //bAllowGlobalPalboxImport=False
+		"bCharacterRecreateInHardcore":                    "TrueFalse",          //bCharacterRecreateInHardcore=False
+		"EquipmentDurabilityDamageRate":                   "Floating",           //EquipmentDurabilityDamageRate=1.000000,
+		"ItemContainerForceMarkDirtyInterval":             "Floating",           //ItemContainerForceMarkDirtyInterval=1.000000
+		"ItemCorruptionMultiplier":                        "Floating",           //ItemCorruptionMultiplier=1.000000
+		"CrossplayPlatforms":                              "CrossplayPlatforms", //CrossplayPlatforms=(Steam,Xbox,PS5,Mac)
+		"PhysicsActiveDropItemMaxNum":                     "SignedNumeric",      //PhysicsActiveDropItemMaxNum=-1,
+		"bEnableFastTravelOnlyBaseCamp":                   "TrueFalse",          //bEnableFastTravelOnlyBaseCamp=False,
+		"bAllowClientMod":                                 "TrueFalse",          //bAllowClientMod=True,
+		"PlayerDataPalStorageUpdateCheckTickInterval":     "Floating",           //PlayerDataPalStorageUpdateCheckTickInterval=1.000000,
+		"MonsterFarmActionSpeedRate":                      "Floating",           //MonsterFarmActionSpeedRate=1.000000,
+		"DenyTechnologyList":                              "String",             //DenyTechnologyList=,
+		"GuildRejoinCooldownMinutes":                      "Numeric",            //GuildRejoinCooldownMinutes=0,
+		"AutoTransferMasterCheckIntervalSeconds":          "Floating",           //AutoTransferMasterCheckIntervalSeconds=3600.000000,
+		"AutoTransferMasterThresholdDays":                 "Numeric",            //AutoTransferMasterThresholdDays=14,
+		"MaxGuildsPerFrame":                               "Numeric",            //MaxGuildsPerFrame=10,
+		"BlockRespawnTime":                                "Floating",           //BlockRespawnTime=5.000000,
+		"RespawnPenaltyDurationThreshold":                 "Floating",           //RespawnPenaltyDurationThreshold=0.000000,
+		"RespawnPenaltyTimeScale":                         "Floating",           //RespawnPenaltyTimeScale=2.000000,
+		"bDisplayPvPItemNumOnWorldMap_BaseCamp":           "TrueFalse",          //bDisplayPvPItemNumOnWorldMap_BaseCamp=False,
+		"bDisplayPvPItemNumOnWorldMap_Player":             "TrueFalse",          //bDisplayPvPItemNumOnWorldMap_Player=False,
+		"AdditionalDropItemWhenPlayerKillingInPvPMode":    "String",             //AdditionalDropItemWhenPlayerKillingInPvPMode="PlayerDropItem",
+		"AdditionalDropItemNumWhenPlayerKillingInPvPMode": "Numeric",            //AdditionalDropItemNumWhenPlayerKillingInPvPMode=1,
+		"bAdditionalDropItemWhenPlayerKillingInPvPMode":   "TrueFalse",          //bAdditionalDropItemWhenPlayerKillingInPvPMode=False,
+		"bEnableVoiceChat":                                "TrueFalse",          //bEnableVoiceChat=False,
+		"VoiceChatMaxVolumeDistance":                      "Floating",           //VoiceChatMaxVolumeDistance=3000.000000,
+		"VoiceChatZeroVolumeDistance":                     "Floating",           //VoiceChatZeroVolumeDistance=15000.000000,
+		"bAllowEnhanceStat_Health":                        "TrueFalse",          //bAllowEnhanceStat_Health=True,
+		"bAllowEnhanceStat_Attack":                        "TrueFalse",          //bAllowEnhanceStat_Attack=True,
+		"bAllowEnhanceStat_Stamina":                       "TrueFalse",          //bAllowEnhanceStat_Stamina=True,
+		"bAllowEnhanceStat_Weight":                        "TrueFalse",          //bAllowEnhanceStat_Weight=True,
+		"bAllowEnhanceStat_WorkSpeed":                     "TrueFalse",          //bAllowEnhanceStat_WorkSpeed=True,
+		"bEnableBuildingPlayerUIdDisplay":                 "TrueFalse",          //bEnableBuildingPlayerUIdDisplay=False,
+		"BuildingNameDisplayCacheTTLSeconds":              "Numeric",            //BuildingNameDisplayCacheTTLSeconds=60,
+		"bIsShowJoinLeftMessage":                          "TrueFalse",          //bIsShowJoinLeftMessage=True,
 
 		// Add other keys as needed
 	}
@@ -280,6 +343,7 @@ func main() {
 		"BanListURL":        true,
 		"PublicIP":          true,
 		"RandomizerSeed":    true,
+		"AdditionalDropItemWhenPlayerKillingInPvPMode": true,
 		// Add other keys as needed
 	}
 	// Determine the operating system
@@ -426,48 +490,55 @@ func setINIValue(content *[]byte, key, value string, addQuotes bool) {
 		return
 	}
 
-	// Line 340-364 is chatgpt generated but seems to work just fine
+	// Find the value end while respecting quotes and nested parentheses.
+	// This supports values like quoted strings with commas and parenthesized lists.
 	var endPos int
+	start := pos + len(searchStr)
+	inQuotes := false
+	escaped := false
+	parenDepth := 0
+	endPos = len(contentStr) - pos
 
-	if key == "CrossplayPlatforms" {
-		// CrossplayPlatforms' value is itself a parenthesized, comma-separated
-		// list, e.g. (Steam,Xbox,PS5,Mac). The generic "first comma or paren"
-		// logic below would stop at the first comma INSIDE that list instead
-		// of the closing ")" that actually ends the field, corrupting the
-		// value. So for this key we always end at the matching closing paren.
-		closeParen := strings.Index(contentStr[pos:], ")")
-		if closeParen == -1 {
-			endPos = len(contentStr)
-		} else {
-			// +1 to include the ")" itself so it gets replaced/removed and
-			// not duplicated when we re-add parentheses around the new value.
-			endPos = closeParen + 1
+	for i := start; i < len(contentStr); i++ {
+		ch := contentStr[i]
+
+		if escaped {
+			escaped = false
+			continue
 		}
-	} else {
-		// normal case, key=value,
-		endPos_1 := strings.Index(contentStr[pos:], ",")
-		// Edge case as the last key has no ending ,
-		endPos_2 := strings.Index(contentStr[pos:], ")")
 
-		// Check if both endPos_1 and endPos_2 are -1, indicating neither comma nor closing parenthesis was found
-		if endPos_1 == -1 && endPos_2 == -1 {
-			// Set endPos to the end of the string
-			endPos = len(contentStr)
-		} else {
-			// If either endPos_1 or endPos_2 is -1, replace it with a large value
-			if endPos_1 == -1 {
-				endPos_1 = len(contentStr) + 1
-			}
-			if endPos_2 == -1 {
-				endPos_2 = len(contentStr) + 1
+		if ch == '\\' && inQuotes {
+			escaped = true
+			continue
+		}
+
+		if ch == '"' {
+			inQuotes = !inQuotes
+			continue
+		}
+
+		if inQuotes {
+			continue
+		}
+
+		if ch == '(' {
+			parenDepth++
+			continue
+		}
+
+		if ch == ')' {
+			if parenDepth > 0 {
+				parenDepth--
+				continue
 			}
 
-			// Choose the minimum of endPos_1 and endPos_2
-			if endPos_1 <= endPos_2 {
-				endPos = endPos_1
-			} else {
-				endPos = endPos_2
-			}
+			endPos = i - pos
+			break
+		}
+
+		if ch == ',' && parenDepth == 0 {
+			endPos = i - pos
+			break
 		}
 	}
 
@@ -485,7 +556,6 @@ func setINIValue(content *[]byte, key, value string, addQuotes bool) {
 	}
 
 	// Calculate the positions in the byte slice
-	start := pos + len(searchStr)
 	end := pos + endPos
 
 	// Ensure the end position is within the slice bounds

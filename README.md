@@ -62,6 +62,7 @@ If you want to support my work:
 | bCanPickupOtherGuildDeathPenaltyDrop    | CAN_PICKUP_OTHER_GUILD_DEATH_PENALTY_DROP |                   |
 | bEnableNonLoginPenalty                  | ENABLE_NON_LOGIN_PENALTY                  |                   |
 | bEnableFastTravel                       | ENABLE_FAST_TRAVEL                        |                   |
+| bEnableFastTravelOnlyBaseCamp           | ENABLE_FAST_TRAVEL_ONLY_BASE_CAMP         |                   |
 | bIsStartLocationSelectByMap             | IS_START_LOCATION_SELECT_BY_MAP           |                   |
 | bExistPlayerAfterLogout                 | EXIST_PLAYER_AFTER_LOGOUT                 |                   |
 | bEnableDefenseOtherGuildPlayer          | ENABLE_DEFENSE_OTHER_GUILD_PLAYER         |                   |
@@ -89,6 +90,8 @@ If you want to support my work:
 | AutoSaveSpan                            | AUTO_SAVE_SPAN                            |                   |
 | RandomizerType                          | RANDOMIZER_TYPE                           |                   |
 | RandomizerSeed                          | RANDOMIZER_SEED                           |                   |
+| PhysicsActiveDropItemMaxNum             | PHYSICS_ACTIVE_DROP_ITEM_MAX_NUM          |                   |
+| bAllowClientMod                         | ALLOW_CLIENT_MOD                          |                   |
 | BuildObjectHpRate                       | BUILD_OBJECT_HP_RATE                      |                   |
 | bHardcore                               | HARDCORE                                  |                   |
 | bPalLost                                | PAL_LOST                                  |                   |
@@ -100,10 +103,36 @@ If you want to support my work:
 | bIsRandomizerPalLevelRandom             | IS_RANDOMIZER_PAL_LEVEL_RANDOM            |                   |
 | bAllowGlobalPalboxExport                | ALLOW_GLOBAL_PALBOX_EXPORT                |                   |
 | bAllowGlobalPalboxImport                | ALLOW_GLOBAL_PALBOX_IMPORT                |                   |
-| CharacterRecreateInHardcore             | CHARACTER_RECREATE_IN_HARDCORE            |                   |
+| bCharacterRecreateInHardcore            | CHARACTER_RECREATE_IN_HARDCORE            |                   |
 | EquipmentDurabilityDamageRate           | EQUIPMENT_DURABILITY_DAMAGE_RATE          |                   |
 | ItemContainerForceMarkDirtyInterval     | ITEM_CONTAINER_FORCE_MARK_DIRTY_INTERVAL  |                   |
 | ItemCorruptionMultiplier                | ITEM_CORRUPTION_MULTIPLIER                |                   |
+| PlayerDataPalStorageUpdateCheckTickInterval | PLAYER_DATA_PAL_STORAGE_UPDATE_CHECK_TICK_INTERVAL |             |
+| MonsterFarmActionSpeedRate              | MONSTER_FARM_ACTION_SPEED_RATE            |                   |
+| DenyTechnologyList                      | DENY_TECHNOLOGY_LIST                      |                   |
+| GuildRejoinCooldownMinutes              | GUILD_REJOIN_COOLDOWN_MINUTES             |                   |
+| AutoTransferMasterCheckIntervalSeconds  | AUTO_TRANSFER_MASTER_CHECK_INTERVAL_SECONDS |                 |
+| AutoTransferMasterThresholdDays         | AUTO_TRANSFER_MASTER_THRESHOLD_DAYS       |                   |
+| MaxGuildsPerFrame                       | MAX_GUILDS_PER_FRAME                      |                   |
+| BlockRespawnTime                        | BLOCK_RESPAWN_TIME                        |                   |
+| RespawnPenaltyDurationThreshold         | RESPAWN_PENALTY_DURATION_THRESHOLD        |                   |
+| RespawnPenaltyTimeScale                 | RESPAWN_PENALTY_TIME_SCALE                |                   |
+| bDisplayPvPItemNumOnWorldMap_BaseCamp   | DISPLAY_PVP_ITEM_NUM_ON_WORLD_MAP_BASE_CAMP |                |
+| bDisplayPvPItemNumOnWorldMap_Player     | DISPLAY_PVP_ITEM_NUM_ON_WORLD_MAP_PLAYER  |                   |
+| AdditionalDropItemWhenPlayerKillingInPvPMode | ADDITIONAL_DROP_ITEM_WHEN_PLAYER_KILLING_IN_PVP_MODE |      |
+| AdditionalDropItemNumWhenPlayerKillingInPvPMode | ADDITIONAL_DROP_ITEM_NUM_WHEN_PLAYER_KILLING_IN_PVP_MODE |  |
+| bAdditionalDropItemWhenPlayerKillingInPvPMode | ENABLE_ADDITIONAL_DROP_ITEM_WHEN_PLAYER_KILLING_IN_PVP_MODE | |
+| bEnableVoiceChat                        | ENABLE_VOICE_CHAT                         |                   |
+| VoiceChatMaxVolumeDistance              | VOICE_CHAT_MAX_VOLUME_DISTANCE            |                   |
+| VoiceChatZeroVolumeDistance             | VOICE_CHAT_ZERO_VOLUME_DISTANCE           |                   |
+| bAllowEnhanceStat_Health                | ALLOW_ENHANCE_STAT_HEALTH                 |                   |
+| bAllowEnhanceStat_Attack                | ALLOW_ENHANCE_STAT_ATTACK                 |                   |
+| bAllowEnhanceStat_Stamina               | ALLOW_ENHANCE_STAT_STAMINA                |                   |
+| bAllowEnhanceStat_Weight                | ALLOW_ENHANCE_STAT_WEIGHT                 |                   |
+| bAllowEnhanceStat_WorkSpeed             | ALLOW_ENHANCE_STAT_WORK_SPEED             |                   |
+| bEnableBuildingPlayerUIdDisplay         | ENABLE_BUILDING_PLAYER_UID_DISPLAY        |                   |
+| BuildingNameDisplayCacheTTLSeconds      | BUILDING_NAME_DISPLAY_CACHE_TTL_SECONDS   |                   |
+| bIsShowJoinLeftMessage                  | IS_SHOW_JOIN_LEFT_MESSAGE                 |                   |
 | CrossplayPlatforms                      | CROSSPLAY_PLATFORMS                       |                   |
 
 # Notes
@@ -119,6 +148,7 @@ If you want to support my work:
 | Rule              | Value                                   | Example                          |
 |-------------------|-----------------------------------------|----------------------------------|
 | Numeric           | Allows only positive numeric values     | "123" or "25565"                 |
+| SignedNumeric     | Allows positive and negative integer values | "-1" or "123"                |
 | Floating          | Allows only positive floating-point values | "0.005" or "3.14"              |
 | TrueFalse         | Allows values "True" or "False"         | "True" or "False"                |
 | String            | Everything                              | "this is a test" or "test"       |
